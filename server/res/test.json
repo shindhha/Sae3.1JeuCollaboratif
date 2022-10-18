@@ -1,0 +1,19 @@
+{
+    "startIDs": [1],
+    "questions": [
+        {
+            "id": 1,
+            "intitule": "Question Boucle",
+            "reponse": ["Rep", "Rep"],
+            "next": [2, 1]
+        },
+
+        {
+            "id": 2,
+            "intitule": "Question fin",
+            "reponse": ["Rep", "Rep"],
+            "next": [-1]
+        }
+    ]
+}
+
