@@ -9,7 +9,7 @@ def clear():
     """
     os.system('cls')
 
-def inputInt(min, max, msg="Veuillez entrer une valeur"):
+def inputInt(min, max, msg="Please input an integer"):
     """
     Demande à l'utilisateur de rentrer un entier entre min et max
     :param msg: Le message a afficher
@@ -27,15 +27,15 @@ def inputInt(min, max, msg="Veuillez entrer une valeur"):
             if rep >= min and rep <= max:
                 reponseOk = True
             else:
-                print("Réponse incorrecte !")
+                print("Incorrect answer !")
         except ValueError:
-            print("Réponse incorrecte !")
+            print("Incorrect answer !")
     return rep
 
 def initConnexion():
     """Initialise la connexion avec le serveur"""
-    ip = input("Veuillez entrer l'IP du serveur : ")
-    port = inputInt(0, 65535, "Veuillez entrer le port du serveur")
+    ip = input("Please input the server IP : ")
+    port = inputInt(0, 65535, "Please input the server port")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((ip, port))
     return sock
@@ -46,18 +46,18 @@ def boucleJeu(connexion):
         # On attend une question du serveur. Ce message peut aussi être la fin de la partie
         # TODO : demander la taille de la question au serveur avant de la recevoir
 
-        print("En attente d'une question du serveur...")
+        print("Waiting question from the server ...")
         question = connexion.recv(1024).decode()
         clear()
         if question != "FIN":
             intervalleRep = connexion.recv(16).decode() # Réception de l'ID MAX de la liste des réponses
             print(question)
-            rep = inputInt(1, int(intervalleRep), "Veuillez entrer votre réponse")
+            rep = inputInt(1, int(intervalleRep), "Please input your response here")
 
             # Envoi de la réponse au serveur
             connexion.send(str(rep).encode())
             clear()
-            print("Réponse envoyée !")
+            print("Response sent !")
             sleep(3)
         else:
             break
@@ -67,9 +67,9 @@ if __name__ == '__main__':
     clear()
     try:
         server = initConnexion()
-        print("Connexion établie !")
+        print("Connection done !")
     except Exception as e:
-        print("Erreur lors de la connexion avec le serveur !")
+        print("Error during the initialisation: " + str(e))
         server = None
 
     if server is not None:
@@ -77,5 +77,5 @@ if __name__ == '__main__':
         boucleJeu(server)
         server.close()
         clear()
-        print("Fin de la partie ! Merci pour votre participation !")
-        input("Appuyez sur entrée pour quitter...")
+        print("Disconnection done !")
+        input("Press enter to exit...")

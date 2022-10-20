@@ -23,7 +23,7 @@ def initSocket(port, ip=''):
 
     socket_ecoute = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socket_ecoute.bind((ip, port))
-    print("Information de connexion pour le joueur 2 : \n   - IP : "
+    print("Information for the applicant : \n   - IP : "
           + socket.gethostbyname(socket.gethostname()) + "\n   - Port : " + str(port))
     return socket_ecoute
 
@@ -42,7 +42,7 @@ def ouvrirFichierQuestions():
         return questDict, jsonFile["startIDs"]
 
 
-def inputInt(min, max, msg="Veuillez entrer une valeur"):
+def inputInt(min, max, msg="Please input an integer"):
     """
     Demande à l'utilisateur de rentrer un entier entre min et max
     :param msg: Le message a afficher
@@ -60,9 +60,9 @@ def inputInt(min, max, msg="Veuillez entrer une valeur"):
             if rep >= min and rep <= max:
                 reponseOk = True
             else:
-                print("Réponse incorrecte !")
+                print("Incorrect answer !")
         except ValueError:
-            print("Réponse incorrecte !")
+            print("Incorrect answer !")
     return rep
 
 
@@ -90,15 +90,16 @@ def boucleJeu(connection):
             break
         else:
             # On demande à l'utilisateur de chosir une question a poser
-            print("Choisissez une question a poser : ")
+            print("Choose a question to ask : ")
             for i in range(len(aChoisir)):
                 print("   - " + str(i + 1) + " : " + str(questDict[aChoisir[i]]))
 
             # Enregistrement du choix de la question
             questionId = inputInt(1, len(aChoisir)) - 1
             questionId = aChoisir[questionId]
-            print("\nVous avez choisi la question : " + str(questDict[questionId]))
+            print("\nYou have chosen : " + str(questDict[questionId]))
             sleep(3)
+            clear()
 
             # On envoie la question au client et on affiche la question envoyée
             # TODO : Envoyer la taille de la caine de caractère représentant la question
@@ -107,7 +108,7 @@ def boucleJeu(connection):
 
             # Affichage de la question mise en forme a l'utilisateur du serveur
             print(questDict[questionId].createQuestionDisplay())
-            print("\nEn attente de la réponse du client...")
+            print("\nWaiting for the applicant...")
 
             # On attend la réponse du client
             # TODO : Calculer la taille de la réponse pour attendre juste le nombre de caractères attendus
@@ -121,14 +122,14 @@ def boucleJeu(connection):
                 reponseStr = questDict[questionId].answers[reponse - 1]
 
                 questionReponseDict[questionId] = reponseStr
-                print("Le client a choisi la réponse : " + reponseStr)
+                print("The applicant has chosen the answer : " + reponseStr)
                 # On récupère les prochains choix de questions
                 aChoisir = questDict[questionId].nextQuestions
                 sleep(3)
             else:
                 # La réponse est mauvaise
-                print("ERREUR! Le client a inséré une réponse qui n'est pas dans la liste des réponses possibles !")
-                print("Cette queestion n'est pas enregistrée !")
+                print("ERROR! The applicant response is incorrect !")
+                print("This response will not be saved !")
                 sleep(3)
 
     # Fin du jeu
@@ -138,10 +139,10 @@ def boucleJeu(connection):
 
     # On affiche les réponses du client
     clear()
-    print("Fin du jeu ! Voici les réponses du client : ")
+    print("End of the game ! Applicant response : ")
     for questionId in questionReponseDict:
         print("   - " + str(questDict[questionId]) + " -> " + questionReponseDict[questionId])
-    input("Appuyez sur entrée pour quitter...")
+    input("Press enter to exit...")
 
 
 if __name__ == "__main__":
@@ -150,17 +151,17 @@ if __name__ == "__main__":
     try:
         tcp = initSocket(52864)
     except OSError:
-        print("Le port est déjà utilisé")
-        print("Fin du programme")
+        print("This port is already in use.")
+        print("Exiting...")
         tcp = None
 
     if tcp is not None:
         # Attente de la connexion du client
-        print("\nEn attente de la connexion du joueur 2...")
+        print("\nWaiting for a connection...")
         tcp.listen()
         client, adress = tcp.accept()
 
-        print("\nLe joueur 2 est connecté ! Adresse du joueur 2 : ", adress)
+        print("\nApplicant connected ! Address of the applicant : ", adress)
         sleep(3)
         clear()
 
