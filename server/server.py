@@ -1,5 +1,7 @@
 import socket
 import json
+from random import randrange
+
 from Question import Question
 import os
 from time import sleep
@@ -148,12 +150,14 @@ def boucleJeu(connection):
 if __name__ == "__main__":
     clear()
     # Initialisation du socket
-    try:
-        tcp = initSocket(52864)
-    except OSError:
-        print("This port is already in use.")
-        print("Exiting...")
-        tcp = None
+
+    tcp = None
+    while tcp is None:
+        port = randrange(49152, 65535)
+        try:
+            tcp = initSocket(port)
+        except OSError: # Le port sélectionné est déja occupé
+            tcp = None
 
     if tcp is not None:
         # Attente de la connexion du client
