@@ -1,5 +1,6 @@
 import socket
 import os
+import time
 from time import sleep
 
 def clear():
@@ -44,11 +45,12 @@ def boucleJeu(connexion):
     """Boucle principale du jeu"""
     while True:
         # On attend une question du serveur. Ce message peut aussi être la fin de la partie
-        # TODO : demander la taille de la question au serveur avant de la recevoir
 
         print("Waiting question from the server ...")
-        question = connexion.recv(1024).decode()
+        tailleQuestion = int(connexion.recv(1024).decode())
+        question = connexion.recv(tailleQuestion).decode()
         clear()
+
         if question != "FIN":
             intervalleRep = connexion.recv(16).decode() # Réception de l'ID MAX de la liste des réponses
             print(question)

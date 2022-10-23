@@ -1,5 +1,6 @@
 import socket
 import json
+import time
 from random import randrange
 
 from Question import Question
@@ -104,17 +105,18 @@ def boucleJeu(connection):
             clear()
 
             # On envoie la question au client et on affiche la question envoyée
-            # TODO : Envoyer la taille de la caine de caractère représentant la question
-            connection.send(questDict[questionId].createQuestionDisplay().encode())  # Envoi de la question
+            questionDisplay = questDict[questionId].createQuestionDisplay()
+            connection.send(str(len(questionDisplay)).encode()) # Envoi de la taille de la question
+            connection.send(questionDisplay.encode())  # Envoi de la question
             connection.send(str(questDict[questionId].nbReponses()).encode())  # Envoi du nombre de réponses
 
             # Affichage de la question mise en forme a l'utilisateur du serveur
-            print(questDict[questionId].createQuestionDisplay())
+            print(questionDisplay)
             print("\nWaiting for the applicant...")
 
             # On attend la réponse du client
-            # TODO : Calculer la taille de la réponse pour attendre juste le nombre de caractères attendus
-            reponse = connection.recv(16).decode()
+            tailleReponse = len(str(questDict[questionId].nbReponses())) # Calcul de la taille max de la réponse que peut envoyer le client
+            reponse = connection.recv(tailleReponse).decode()
             reponse = int(reponse)
 
             # On vérifie la réponse
@@ -129,14 +131,15 @@ def boucleJeu(connection):
                 aChoisir = questDict[questionId].nextQuestions
                 sleep(3)
             else:
-                # La réponse est mauvaise
+                # La réponse est mauvaise, en théorie on ne devrait jamais arriver ici (sauf si le client a été modifié)
                 print("ERROR! The applicant response is incorrect !")
                 print("This response will not be saved !")
                 sleep(3)
 
     # Fin du jeu
     # On envoie le message de fin au client
-    # TODO envoyer la taille de la chaine de caractère
+    connection.send(str(len("FIN")).encode()) # Taille de la chaine de fin
+    time.sleep(0.1) # On attent pour éviter que TCP envoie les 2 messages en même temps
     connection.send("FIN".encode())
 
     # On affiche les réponses du client

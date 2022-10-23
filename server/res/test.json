@@ -4,14 +4,14 @@
         {
             "id": 1,
             "intitule": "Question Boucle",
-            "reponse": ["Rep", "Rep"],
+            "reponse": ["Rep1", "Rep2"],
             "next": [2, 1]
         },
 
         {
             "id": 2,
             "intitule": "Question fin",
-            "reponse": ["Rep", "Rep"],
+            "reponse": ["Rep1", "Rep2"],
             "next": [-1]
         }
     ]
