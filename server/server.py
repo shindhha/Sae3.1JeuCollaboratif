@@ -3,6 +3,10 @@ import json
 import time
 from random import randrange
 
+# Permet l'import du module question sans erreur
+import sys
+sys.path.insert(0, ".")
+
 from Question import Question
 import os
 from time import sleep
