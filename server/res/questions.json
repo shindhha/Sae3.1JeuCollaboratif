@@ -3,114 +3,317 @@
     "questions": [
         {
             "id": 1,
-            "intitule": "Question 1",
-            "reponse": ["Rep", "Rep"],
-            "next": [2, 3]
+            "intitule": "What is your main field of expertise in computer science ?",
+            "reponses": [
+                {
+                    "rep": "Network, system administration",
+                    "nextQuestions": [2, 3]
+                },
+                {
+                    "rep": "Programming, project management",
+                    "nextQuestions": [12, 13]
+                }
+            ]
         },
 
         {
             "id": 2,
-            "intitule": "Question 2",
-            "reponse": ["Rep", "Rep"],
-            "next": [5, 3]
+            "intitule": "Which of these two following programming languages are you most proficient in ?",
+            "reponses": [
+                {
+                    "rep": "Java",
+                    "nextQuestions": [8, 9]
+                },
+                {
+                    "rep": "C++",
+                    "nextQuestions": [10, 11]
+                }
+            ]
         },
 
         {
             "id": 3,
-            "intitule": "Question 3",
-            "reponse": ["Rep", "Rep"],
-            "next": [6, 4]
+            "intitule": "In computer science, structure takes a big part. Which working method have you used most ?",
+            "reponses": [
+                {
+                    "rep": "SCRUM and XP",
+                    "nextQuestions": [6, 7]
+                },
+                {
+                    "rep": "FDD",
+                    "nextQuestions": [4, 5]
+                }
+            ]
         },
 
         {
             "id": 4,
-            "intitule": "Question 4",
-            "reponse": ["Rep", "Rep"],
-            "next": [12, 13]
+            "intitule": "You are the manager of a team working on a project in the company, you notice that a bad atmosphere has settled in the team, how do you react ?",
+            "reponses": [
+                {
+                    "rep": "I organize a special meeting and ask everyone to meet up to work out the problem and a solution for everyone to be happy in the making of the project",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "I talk to each member of the team separately and ask them if they have some problems with other team members or with the making of the project",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 5,
-            "intitule": "Question 5",
-            "reponse": ["Rep", "Rep"],
-            "next": [6, 8]
+            "intitule": "In this situation, the deadline of the project is in 15 days and there is still 60% of the features that are not even started, do you :",
+            "reponses": [
+                {
+                    "rep": "Abandon and ask for more time, being quite aware of the consequences and penalties",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "Try my hardest to finish a major part of the project in time, even if I need to sacrifice a lot of my private life time",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 6,
-            "intitule": "Question 6",
-            "reponse": ["Rep", "Rep"],
-            "next": [8, 16]
+            "intitule": "Hand-on experience: during a project, how will you react if you disagree with your project workmate ?",
+            "reponses": [
+                {
+                    "rep": "I will discuss with him the litigious points",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "I say nothing and just continue to work while I hate him in secret",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 7,
-            "intitule": "Question 7",
-            "reponse": ["Rep", "Rep"],
-            "next": [14, 15]
+            "intitule": "What's your goal in the company ?",
+            "reponses": [
+                {
+                    "rep": "My role will fit me perfectly",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "I want to evolve to a higher role in the long term",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 8,
-            "intitule": "Question 8",
-            "reponse": ["Rep", "Rep"],
-            "next": [11, 12]
+            "intitule": "Do you have some difficulty staying concentrated in a situation that can put you under pressure ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 9,
-            "intitule": "Question 9",
-            "reponse": ["Rep", "Rep"],
-            "next": [14, 16]
+            "intitule": "If we need to complete a team temporarily, would you be okay about changing post for the time needed ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 10,
-            "intitule": "Question 10",
-            "reponse": ["Rep", "Rep"],
-            "next": [-1]
+            "intitule": "How long have you known about these languages ?",
+            "reponses": [
+                {
+                    "rep": "Between 1 and 10 years",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "More than 10 years",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 11,
-            "intitule": "Question 11",
-            "reponse": ["Rep", "Rep"],
-            "next": [13, 9]
+            "intitule": "Have you ever worked as a developer in a project that only uses the Java language ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 12,
-            "intitule": "Question 12",
-            "reponse": ["Rep", "Rep"],
-            "next": [7, 9]
+            "intitule": "Did you ever work as an administrator of a big network in your past work experiences ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [14, 15]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [16, 17]
+                }
+            ]
         },
 
         {
             "id": 13,
-            "intitule": "Question 13",
-            "reponse": ["Rep", "Rep"],
-            "next": [16, 10]
+            "intitule": "How long have you worked in system administration ?",
+            "reponses": [
+                {
+                    "rep": "Less than 5 years",
+                    "nextQuestions": [18, 19]
+                },
+                {
+                    "rep": "5 years or more",
+                    "nextQuestions": [20, 21]
+                }
+            ]
         },
 
         {
             "id": 14,
-            "intitule": "Question 14",
-            "reponse": ["Rep", "Rep"],
-            "next": [16, 10]
+            "intitule": "Did you ever face hacking on the network you were the administrator ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 15,
-            "intitule": "Question 15",
-            "reponse": ["Rep", "Rep"],
-            "next": [16, 10]
+            "intitule": "Are you already trained with the attitude to adopt in case of a network attack ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         },
 
         {
             "id": 16,
-            "intitule": "Question 16",
-            "reponse": ["Rep", "Rep"],
-            "next": [10]
+            "intitule": "Is the idea of performing some permanence hours to ensure the stability of the IT system okay to you ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
+        },
+
+        {
+            "id": 17,
+            "intitule": "What's your goal in the company ?",
+            "reponses": [
+                {
+                    "rep": "My role will fit me perfectly",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "I want to evolve to a higher role in the long term",
+                    "nextQuestions": [-1]
+                }
+            ]
+        },
+
+        {
+            "id": 18,
+            "intitule": "How many people were managing the network with you ?",
+            "reponses": [
+                {
+                    "rep": "Fewer than 2",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "More than 2",
+                    "nextQuestions": [-1]
+                }
+            ]
+        },
+
+        {
+            "id": 19,
+            "intitule": "What do you think about our information system ?",
+            "reponses": [
+                {
+                    "rep": "It needs to be updated",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "It’s okay as it is",
+                    "nextQuestions": [-1]
+                }
+            ]
+        },
+
+        {
+            "id": 20,
+            "intitule": "Were you the manager of the system administration or a member of staff ?",
+            "reponses": [
+                {
+                    "rep": "Staff member",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "Manager",
+                    "nextQuestions": [-1]
+                }
+            ]
+        },
+
+        {
+            "id": 21,
+            "intitule": "Do you have some difficulty staying focused on a situation that can put you under pressure ?",
+            "reponses": [
+                {
+                    "rep": "Yes",
+                    "nextQuestions": [-1]
+                },
+                {
+                    "rep": "No",
+                    "nextQuestions": [-1]
+                }
+            ]
         }
     ]
 }
