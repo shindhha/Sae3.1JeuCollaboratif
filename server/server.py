@@ -47,7 +47,7 @@ def ouvrirFichierQuestions():
         for question in jsonFile["questions"]:
             lteReponses = []
             for rep in question["reponses"]:
-                lteReponses.append(Reponse(rep["reponse"], rep["nextQuestions"]))
+                lteReponses.append(Reponse(rep["rep"], rep["nextQuestions"]))
 
             questDict[question["id"]] = Question(question["intitule"], lteReponses)
         return questDict, jsonFile["startIDs"]
@@ -160,6 +160,7 @@ def boucleJeu(connection):
 
 if __name__ == "__main__":
     clear()
+    ouvrirFichierQuestions()
     # Initialisation du socket
 
     tcp = None
