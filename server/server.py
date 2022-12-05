@@ -7,7 +7,7 @@ from random import randrange
 import sys
 sys.path.insert(0, ".")
 
-from Question import Question
+from Question import Question, Reponse
 import os
 from time import sleep
 
@@ -40,12 +40,16 @@ def ouvrirFichierQuestions():
     Ouvre le fichier des questions (json) et les stocke dans un dictionnaire avec id -> question
     :return: Le dict des questions ainsi qu'une liste contenants les id des questions que le serveur doit choisir au départ
     """
-    path = "res/test.json"
+    path = "res/questions.json"
     with open(path, "r") as file:
         jsonFile = json.load(file)
         questDict = {}
         for question in jsonFile["questions"]:
-            questDict[question["id"]] = Question(question["intitule"], question["reponse"], question["next"])
+            lteReponses = []
+            for rep in question["reponses"]:
+                lteReponses.append(Reponse(rep["reponse"], rep["nextQuestions"]))
+
+            questDict[question["id"]] = Question(question["intitule"], lteReponses)
         return questDict, jsonFile["startIDs"]
 
 
@@ -77,7 +81,6 @@ def boucleJeu(connection):
     """
     Lancement de la boucle principale du jeu.
     :param connection: L'objet de connexion tcp
-    :param adress: L'adresse du destinataire retourné lors de accept() de la connexion
     :return: None
     """
 
@@ -86,8 +89,9 @@ def boucleJeu(connection):
 
     try:
         questDict, aChoisir = ouvrirFichierQuestions()
-    except Exception:
-        print("Erreur lors de l'ouverture du fichier des questions !")
+    except Exception as e:
+        print("Error while opening question file : " + str(e))
+        sleep(3)
         return
 
     while True:
@@ -125,14 +129,14 @@ def boucleJeu(connection):
 
             # On vérifie la réponse
             if reponse in range(1, len(
-                    questDict[questionId].answers) + 1):  # +1 car range est exclusif sur la borne supérieure
+                    questDict[questionId].getAnswers()) + 1):  # +1 car range est exclusif sur la borne supérieure
                 # La réponse est bonne, on récupère la réponse correspondante à l'ID envoyée
-                reponseStr = questDict[questionId].answers[reponse - 1]
+                reponseObj = questDict[questionId].getAnswers()[reponse - 1]
 
-                questionReponseDict[questionId] = reponseStr
-                print("The applicant has chosen the answer : " + reponseStr)
+                questionReponseDict[questionId] = str(reponseObj)
+                print("The applicant has chosen the answer : " + str(reponseObj))
                 # On récupère les prochains choix de questions
-                aChoisir = questDict[questionId].nextQuestions
+                aChoisir = reponseObj.getNextQuestions()
                 sleep(3)
             else:
                 # La réponse est mauvaise, en théorie on ne devrait jamais arriver ici (sauf si le client a été modifié)
@@ -177,7 +181,13 @@ if __name__ == "__main__":
         clear()
 
         # Lancement du jeu
-        boucleJeu(client)
+        try:
+            boucleJeu(client)
+        except Exception as e:
+            print("An error has occurred during the game ! " + str(e))
+            print("The applicant will be disconnected !")
 
+        # Fermeture de la connexion
+        client.close()
         # Fermeture du socket
         tcp.close()
