@@ -1,7 +1,7 @@
 import socket
 import os
-import time
 from time import sleep
+import re
 
 def clear():
     """
@@ -35,7 +35,16 @@ def inputInt(min, max, msg="Please input an integer"):
 
 def initConnexion():
     """Initialise la connexion avec le serveur"""
-    ip = input("Please input the server IP : ")
+    ipRgx = re.compile(r"^((1?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).){3}(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$|^localhost$")
+    ip = "tampon"
+    while not ipRgx.match(ip):
+        ip = input("Please input the server IP : ")
+        if ip == "":
+            ip = "localhost"
+            print("Blank IP, connecting to local . . .")
+        elif not ipRgx.match(ip):
+            print("Incorrect IP ! Must be in the form : X.X.X.X or localhost")
+
     port = inputInt(0, 65535, "Please input the server port")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((ip, port))
@@ -62,22 +71,38 @@ def boucleJeu(connexion):
             print("Response sent !")
             sleep(3)
         else:
+            print("Thanks for your participation !")
+            sleep(3)
             break
 
 
 if __name__ == '__main__':
     clear()
-    try:
-        server = initConnexion()
-        print("Connection done !")
-    except Exception as e:
-        print("Error during the initialisation: " + str(e))
-        server = None
+    server = None
+    while server is None:
+        try:
+            server = initConnexion()
+            print("Connection done !")
+        except TimeoutError:
+            print("Connection timed out ! Please try again . . .")
+            server = None
+        except ConnectionRefusedError:
+            print("Connection refused ! Please try again . . .")
+            server = None
+        except OSError:
+            print("Connection error ! Please try again . . .")
+            server = None
 
     if server is not None:
         clear()
-        boucleJeu(server)
-        server.close()
+        try:
+            boucleJeu(server)
+        except Exception as e:
+            print("An error has occurred during the game ! " + str(e))
+        finally:
+            server.close()
+            print("Connection closed !")
+            sleep(3)
         clear()
         print("Disconnection done !")
         input("Press enter to exit...")
