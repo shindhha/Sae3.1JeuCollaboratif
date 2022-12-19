@@ -5,6 +5,7 @@ from random import randrange
 
 # Permet l'import du module question sans erreur
 import sys
+
 sys.path.insert(0, ".")
 
 from Question import Question, Reponse
@@ -77,6 +78,100 @@ def inputInt(min, max, msg="Please input an integer"):
     return rep
 
 
+def envoieQuestion(idQuestion, connection):
+    """
+    Envoie de la question au client avec le format voulu
+    :param idQuestion: id de la question a envoyée
+    :param connection: L'objet de connexion tcp
+    """
+    questionDisplay = idQuestion.createQuestionDisplayClient()
+    connection.send(str(len(questionDisplay)).encode())  # Envoi de la taille de la question
+    connection.send(questionDisplay.encode())  # Envoi de la question
+    connection.send(str(idQuestion.nbReponses()).encode())  # Envoi du nombre de réponses
+
+
+def choixQuestion(questDict, aChoisir):
+    """
+    Choix de la prochaine question a envoyée au client
+    :param questDict: dictionnaire des questions
+    :param aChoisir: liste des questions a choisir par le serveur
+    :return : renvoie l'id de la question choisie
+    """
+    # On demande à l'utilisateur de chosir une question a poser si ce n'est pas la premiere question
+    if len(aChoisir) == 2:
+        print("Choose a question to ask : ")
+        for i in range(len(aChoisir)):
+            print("   - " + str(i + 1) + " : " + str(questDict[aChoisir[i]]))
+        questionId = inputInt(1, len(aChoisir)) - 1
+        questionId = aChoisir[questionId]
+        print("\nYou have chosen : " + str(questDict[questionId]))
+        sleep(3)
+        clear()
+    else:
+        questionId = 0
+        questionId = aChoisir[questionId]
+        print("The first question is always the same")
+        sleep(3)
+    return questionId
+
+
+def receptionReponse(idQuestion, connection):
+    """
+    Réception de la réponse client
+    :param idQuestion: Id de la question en cours
+    :param connection: L'objet de connexion tcp
+    :return : renvoie la réponse du client
+    """
+    # On attend la réponse du client
+    tailleReponse = len(
+        str(idQuestion.nbReponses()))  # Calcul de la taille max de la réponse que peut envoyer le client
+    reponse = connection.recv(tailleReponse).decode()
+    reponse = int(reponse)
+    return reponse
+
+
+def verificationReponse(reponse, idQuestion):
+    """
+    Vérification de la validité de la réponse
+    :param reponse: réponse du client
+    :param idQuestion: id de la question actuelle
+    :return : renvoie l'objet réponse correspondant
+    """
+    # On vérifie la réponse
+    if reponse in range(1, len(
+            idQuestion.getAnswers()) + 1):  # +1 car range est exclusif sur la borne supérieure
+        # La réponse est bonne, on récupère la réponse correspondante à l'ID envoyée
+        reponseObj = idQuestion.getAnswers()[reponse - 1]
+        print("The applicant has chosen the answer : " + str(reponseObj))
+        return reponseObj
+    else:
+        # La réponse est mauvaise, en théorie on ne devrait jamais arriver ici (sauf si le client a été modifié)
+        print("ERROR! The applicant response is incorrect !")
+        print("This response will not be saved !")
+        return None
+
+
+def finDuJeu(connection, questionReponseDict, questDict):
+    """
+    Fin du jeu avec affichage du résumé des réponses
+    :param connection: L'objet de connexion tcp
+    :param questionReponseDict: dictionnaire des réponses par questions
+    :param questDict: dictionnaire des questions
+    """
+
+    # On envoie le message de fin au client
+    connection.send(str(len("FIN")).encode())  # Taille de la chaine de fin
+    time.sleep(0.1)  # On attent pour éviter que TCP envoie les 2 messages en même temps
+    connection.send("FIN".encode())
+
+    # On affiche les réponses du client
+    clear()
+    print("End of the game ! Applicant response : ")
+    for questionId in questionReponseDict:
+        print("   - " + str(questDict[questionId]) + " -> " + questionReponseDict[questionId])
+    input("Press enter to exit...")
+
+
 def boucleJeu(connection):
     """
     Lancement de la boucle principale du jeu.
@@ -100,63 +195,33 @@ def boucleJeu(connection):
             # C'est fini, il n'y a plus rien a poser
             break
         else:
-            # On demande à l'utilisateur de chosir une question a poser
-            print("Choose a question to ask : ")
-            for i in range(len(aChoisir)):
-                print("   - " + str(i + 1) + " : " + str(questDict[aChoisir[i]]))
+            # choix de la question
+            questionId = choixQuestion(questDict, aChoisir)
 
-            # Enregistrement du choix de la question
-            questionId = inputInt(1, len(aChoisir)) - 1
-            questionId = aChoisir[questionId]
-            print("\nYou have chosen : " + str(questDict[questionId]))
-            sleep(3)
-            clear()
-
-            # On envoie la question au client et on affiche la question envoyée
-            questionDisplay = questDict[questionId].createQuestionDisplayClient()
-            connection.send(str(len(questionDisplay)).encode()) # Envoi de la taille de la question
-            connection.send(questionDisplay.encode())  # Envoi de la question
-            connection.send(str(questDict[questionId].nbReponses()).encode())  # Envoi du nombre de réponses
+            # envoie de la question au client
+            envoieQuestion(questDict[questionId], connection)
 
             # Affichage de la question mise en forme a l'utilisateur du serveur
             questionDisplay = questDict[questionId].createQuestionDisplayServer()
             print(questionDisplay)
             print("\nWaiting for the applicant...")
 
-            # On attend la réponse du client
-            tailleReponse = len(str(questDict[questionId].nbReponses())) # Calcul de la taille max de la réponse que peut envoyer le client
-            reponse = connection.recv(tailleReponse).decode()
-            reponse = int(reponse)
+            # Réception de la reponse
+            reponse = receptionReponse(questDict[questionId], connection)
 
-            # On vérifie la réponse
-            if reponse in range(1, len(
-                    questDict[questionId].getAnswers()) + 1):  # +1 car range est exclusif sur la borne supérieure
-                # La réponse est bonne, on récupère la réponse correspondante à l'ID envoyée
-                reponseObj = questDict[questionId].getAnswers()[reponse - 1]
-
-                questionReponseDict[questionId] = str(reponseObj)
-                print("The applicant has chosen the answer : " + str(reponseObj))
+            # vérifiaction de la réponse
+            repObj = verificationReponse(reponse, questDict[questionId])
+            if repObj is None:
+                aChoisir = -1
+            else :
+                # ajout de l'objet réponse dans le dictionnaire
+                questionReponseDict[questionId] = str(repObj)
                 # On récupère les prochains choix de questions
-                aChoisir = reponseObj.getNextQuestions()
-                sleep(3)
-            else:
-                # La réponse est mauvaise, en théorie on ne devrait jamais arriver ici (sauf si le client a été modifié)
-                print("ERROR! The applicant response is incorrect !")
-                print("This response will not be saved !")
+                aChoisir = repObj.getNextQuestions()
                 sleep(3)
 
     # Fin du jeu
-    # On envoie le message de fin au client
-    connection.send(str(len("FIN")).encode()) # Taille de la chaine de fin
-    time.sleep(0.1) # On attent pour éviter que TCP envoie les 2 messages en même temps
-    connection.send("FIN".encode())
-
-    # On affiche les réponses du client
-    clear()
-    print("End of the game ! Applicant response : ")
-    for questionId in questionReponseDict:
-        print("   - " + str(questDict[questionId]) + " -> " + questionReponseDict[questionId])
-    input("Press enter to exit...")
+    finDuJeu(connection, questionReponseDict, questDict)
 
 
 if __name__ == "__main__":
@@ -169,7 +234,7 @@ if __name__ == "__main__":
         port = randrange(49152, 65535)
         try:
             tcp = initSocket(port)
-        except OSError: # Le port sélectionné est déja occupé
+        except OSError:  # Le port sélectionné est déja occupé
             tcp = None
 
     if tcp is not None:
