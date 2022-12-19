@@ -71,9 +71,9 @@ def inputInt(min, max, msg="Please input an integer"):
             if rep >= min and rep <= max:
                 reponseOk = True
             else:
-                print("Incorrect answer !")
+                print("Incorrect choice !")
         except ValueError:
-            print("Incorrect answer !")
+            print("Incorrect choice !")
     return rep
 
 
@@ -113,12 +113,13 @@ def boucleJeu(connection):
             clear()
 
             # On envoie la question au client et on affiche la question envoyée
-            questionDisplay = questDict[questionId].createQuestionDisplay()
+            questionDisplay = questDict[questionId].createQuestionDisplayClient()
             connection.send(str(len(questionDisplay)).encode()) # Envoi de la taille de la question
             connection.send(questionDisplay.encode())  # Envoi de la question
             connection.send(str(questDict[questionId].nbReponses()).encode())  # Envoi du nombre de réponses
 
             # Affichage de la question mise en forme a l'utilisateur du serveur
+            questionDisplay = questDict[questionId].createQuestionDisplayServer()
             print(questionDisplay)
             print("\nWaiting for the applicant...")
 

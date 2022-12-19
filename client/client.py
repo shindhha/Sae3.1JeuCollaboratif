@@ -28,9 +28,9 @@ def inputInt(min, max, msg="Please input an integer"):
             if rep >= min and rep <= max:
                 reponseOk = True
             else:
-                print("Incorrect answer !")
+                print("Incorrect choice !")
         except ValueError:
-            print("Incorrect answer !")
+            print("Incorrect choice !")
     return rep
 
 def initConnexion():

@@ -9,7 +9,19 @@ class Question:
         """
         return len(self.__answers)
 
-    def createQuestionDisplay(self):
+    def createQuestionDisplayServer(self):
+        """
+        Crée la chaine de caractère jolie à afficher à l'utilisateur
+        :return: La chaine de caractère
+        """
+        # la question est entourée l'étoiles (*)
+        chaine = "*" * (len(self.__question) + 4) + "\n" \
+                 + "* " + self.__question + " *\n" \
+                 + "*" * (len(self.__question) + 4) + "\n"
+
+        return chaine
+
+    def createQuestionDisplayClient(self):
         """
         Crée la chaine de caractère jolie à afficher à l'utilisateur
         :return: La chaine de caractère
