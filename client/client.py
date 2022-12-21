@@ -34,9 +34,14 @@ def inputInt(min, max, msg="Please input an integer"):
     return rep
 
 def initConnexion():
-    """Initialise la connexion avec le serveur"""
+    """
+    Initialise la connexion avec le serveur
+    :return : soit la socket de connexion
+              soit 1 pour indiquer trop d'erreur de saisie
+    """
     ipRgx = re.compile(r"^((1?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).){3}(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$|^localhost$")
     ip = "tampon"
+    compErreur = 0
     while not ipRgx.match(ip):
         ip = input("Please input the server IP : ")
         if ip == "":
@@ -44,11 +49,22 @@ def initConnexion():
             print("Blank IP, connecting to local . . .")
         elif not ipRgx.match(ip):
             print("Incorrect IP ! Must be in the form : X.X.X.X or localhost")
+            compErreur += 1
 
-    port = inputInt(0, 65535, "Please input the server port")
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((ip, port))
-    return sock
+        # si nombres erreurs d'entrée égale a 5 alors on coupe sinon programme infinie en cas d'echec consécutif
+        if compErreur >= 5:
+            break
+
+    if compErreur < 5:
+        port = inputInt(0, 65535, "Please input the server port")
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((ip, port))
+        return sock
+    else:
+        # correspond a une erreur si trop d 'erreur d'entrée dans l'adresse IP
+        return 1
+
+
 
 def boucleJeu(connexion):
     """Boucle principale du jeu"""
@@ -79,19 +95,31 @@ def boucleJeu(connexion):
 if __name__ == '__main__':
     clear()
     server = None
+    compErreur = 0
     while server is None:
         try:
             server = initConnexion()
-            print("Connection done !")
+            # Si trop d'erreur de saisie alors on mets le nombre d'erreur au max
+            if server == 1:
+                compErreur = 5
+            else:
+                print("Connection done !")
         except TimeoutError:
             print("Connection timed out ! Please try again . . .")
             server = None
         except ConnectionRefusedError:
             print("Connection refused ! Please try again . . .")
+            compErreur += 1
             server = None
         except OSError:
             print("Connection error ! Please try again . . .")
             server = None
+
+        # Si nombre d'erreurs égale a 5 alors on demande de relancer et arrete le prog
+        if compErreur >= 5:
+            print("Too many wrong attempts, restart the game")
+            server = None
+            break
 
     if server is not None:
         clear()
