@@ -111,7 +111,6 @@ def choixQuestion(questDict, aChoisir):
         questionId = 0
         questionId = aChoisir[questionId]
         print("The first question is always the same")
-        sleep(3)
     return questionId
 
 
@@ -168,7 +167,7 @@ def finDuJeu(connection, questionReponseDict, questDict):
     clear()
     print("End of the game ! Applicant response : ")
     for questionId in questionReponseDict:
-        print("   - " + str(questDict[questionId]) + " -> " + questionReponseDict[questionId])
+        print("   - " + str(questDict[questionId]) + "\n       -> " + questionReponseDict[questionId])
     input("Press enter to exit...")
 
 

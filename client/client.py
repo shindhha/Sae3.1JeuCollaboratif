@@ -103,6 +103,5 @@ if __name__ == '__main__':
             server.close()
             print("Connection closed !")
             sleep(3)
-        clear()
         print("Disconnection done !")
         input("Press enter to exit...")
