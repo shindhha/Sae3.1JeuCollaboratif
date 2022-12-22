@@ -68,15 +68,25 @@ def initConnexion():
 
 def boucleJeu(connexion):
     """Boucle principale du jeu"""
+    # affichage des regles
+    print("-------------- Rules of the game --------------\n")
+    print("You are applicant, in this game, \n"
+          "you have to answer 3 questions in the most sincere way by choosing among the answers given. \n"
+          "These questions are given by the recruiter. \n"
+          "When the game ends, you will be able to  close the window\n")
+
+    # permet de laisser le temps de lire
+    sleep(5)
+
     while True:
         # On attend une question du serveur. Ce message peut aussi être la fin de la partie
-
         print("Waiting question from the server ...")
         tailleQuestion = int(connexion.recv(1024).decode())
         question = connexion.recv(tailleQuestion).decode()
         clear()
 
         if question != "FIN":
+            clear()
             intervalleRep = connexion.recv(16).decode() # Réception de l'ID MAX de la liste des réponses
             print(question)
             rep = inputInt(1, int(intervalleRep), "Please input your response here")

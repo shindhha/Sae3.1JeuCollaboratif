@@ -181,6 +181,15 @@ def boucleJeu(connection):
     questionId = 0  # L'id de la question qui est jouée
     questionReponseDict = {}  # Dictionnaire contenant les réponses que formule le client
 
+    print("-------------- Rules of the game --------------\n")
+    print("You are the recruiter,\n"
+          "the first question is imposed.\n"
+          "For the next question, you have to choose between 2 questions that are given.\n"
+          "these questions are linked to the applicant's answers.\n"
+          "When the game ends, you will be able to see a summary of the questions and answers.\n")
+
+    # permet de laisser le temps de lire
+    sleep(5)
     try:
         questDict, aChoisir = ouvrirFichierQuestions()
     except Exception as e:
