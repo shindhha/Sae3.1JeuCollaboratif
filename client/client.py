@@ -21,16 +21,27 @@ def inputInt(min, max, msg="Please input an integer"):
     msg = msg + " (" + str(min) + " - " + str(max) + ") : "
 
     reponseOk = False
+    erreur = 0
     while not reponseOk:
         rep = input(msg)
         try:
-            rep = int(rep)
-            if rep >= min and rep <= max:
-                reponseOk = True
+            if rep.isdigit():
+                if rep >= min and rep <= max:
+                    reponseOk = True
+                else:
+                    erreur += 1
+                    print("Incorrect choice !")
             else:
+                erreur += 1
                 print("Incorrect choice !")
         except ValueError:
+            erreur += 1
             print("Incorrect choice !")
+
+        if erreur >= 5:
+            rep = erreur
+            reponseOk = True
+
     return rep
 
 def initConnexion():
@@ -57,6 +68,8 @@ def initConnexion():
 
     if compErreur < 5:
         port = inputInt(0, 65535, "Please input the server port")
+        if port == 5:
+            return 1
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((ip, port))
         return sock
