@@ -6,6 +6,21 @@ SET INSTALLDIR=%APPDATA%\SAE\
 SET CURDIR=%cd%
 SET RESDIREXTRACT=%INSTALLDIR%\RES\
 
+rem On teste pour voir si le chemin d'installation est sur un disque réseau
+SET TESTUNC=%INSTALLDIR:~0,2%
+IF %TESTUNC%==\\ (
+	echo WARN : Installation directory is located with UNC path. Moving to %CURDIR%\softwareSource.
+	SET INSTALLDIR=%CURDIR%\softwareSource
+	SET RESDIREXTRACT=%CURDIR%\softwareSource\RES\
+)
+ 
+SET TESTUNC=%INSTALLDIR:~0,2%
+IF %TESTUNC%==\\ (
+	echo FATAL : Alternative installation directory is located with UNC path. Aborting . . .
+	pause
+	exit
+)
+
 rem extraction des composants dnas un dossier temporaire
 IF NOT EXIST %RESDIREXTRACT% mkdir %RESDIREXTRACT%
 tar -xf %CURDIR%\res.zip -C %INSTALLDIR%\RES\
@@ -49,36 +64,36 @@ echo Location of the launcher : %CURDIR%\Launcher\LaunchRecruiter.bat
 IF NOT EXIST %CURDIR%\Uninstaller\ mkdir %CURDIR%\Uninstaller\
 
 rem ------------- Création du desinstalleur ----------------
-echo @ECHO OFF > %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo chcp 65001 ^> NUL >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rem Supression du serveur >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rmdir /S /Q %INSTALLDIR%\Server >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo del /Q %CURDIR%\Launcher\LaunchRecruiter.bat >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo echo The recruiter app has been uninstalled ! >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo. >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
+echo @ECHO OFF > %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo chcp 65001 ^> NUL >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rem Supression du serveur >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rmdir /S /Q %INSTALLDIR%\Server >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo del /Q %CURDIR%\Launcher\LaunchRecruiter.bat >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo echo The recruiter app has been uninstalled ! >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo. >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
 
-echo rem Check si le CLIENT est installé ou non pour faire une supression totale ^(python et dossiers des scripts de lancement/desinstall^) >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo IF EXIST %INSTALLDIR%\Client\ goto simpleDesinstall >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo echo Uninstalling python. . . >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rmdir /S /Q %INSTALLDIR%\Python >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rmdir /S /Q %CURDIR%\Launcher >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rem On crée un nouveau cmd pour libérer ce fichier et éviter un crash du cmd car le fichier n'existe plus >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rem On change de dossier pour éviter un crash du cmd >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo cd .. >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo start cmd /k "@ECHO OFF && chcp 65001 > NUL && rmdir /S /Q %CURDIR%\Uninstaller && exit" >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo goto end >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo. >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
+echo rem Check si le CLIENT est installé ou non pour faire une supression totale ^(python et dossiers des scripts de lancement/desinstall^) >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo IF EXIST %INSTALLDIR%\Client\ goto simpleDesinstall >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo echo Uninstalling python. . . >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rmdir /S /Q %INSTALLDIR%\Python >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rmdir /S /Q %CURDIR%\Launcher >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rem On crée un nouveau cmd pour libérer ce fichier et éviter un crash du cmd car le fichier n'existe plus >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rem On change de dossier pour éviter un crash du cmd >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo cd .. >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo start cmd /k "@ECHO OFF && chcp 65001 > NUL && rmdir /S /Q %CURDIR%\Uninstaller && exit" >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo goto end >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo. >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
 
-echo :simpleDesinstall >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo rem On crée un nouveau cmd pour libérer ce fichier et éviter un crash du cmd car le fichier n'existe plus >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo start cmd /k "@ECHO OFF && chcp 65001 > NUL && del /Q %CURDIR%\Uninstaller\UninstallerRecruier.bat && exit" >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo. >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
+echo :simpleDesinstall >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo rem On crée un nouveau cmd pour libérer ce fichier et éviter un crash du cmd car le fichier n'existe plus >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo start cmd /k "@ECHO OFF && chcp 65001 > NUL && del /Q %CURDIR%\Uninstaller\UninstallerRecruier.bat && exit" >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo. >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
 
-echo :end >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
-echo pause >> %CURDIR%\Uninstaller\UninstallerRecruiter.bat
+echo :end >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
+echo pause >> %CURDIR%\Uninstaller\UninstallerRecruier.bat
 rem ------------- Création du desinstalleur ----------------
 
-echo Loccation of the uninstaller : %CURDIR%\Uninstaller\UninstallerRecruiter.bat
+echo Loccation of the uninstaller : %CURDIR%\Uninstaller\UninstallerRecruier.bat
 goto afterServer
 
 :end

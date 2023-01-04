@@ -6,6 +6,22 @@ SET INSTALLDIR=%APPDATA%\SAE\
 SET CURDIR=%cd%
 SET RESDIREXTRACT=%INSTALLDIR%\RES\
 
+rem On teste pour voir si le chemin d'installation est sur un disque réseau
+rem On teste pour voir si le chemin d'installation est sur un disque réseau
+SET TESTUNC=%INSTALLDIR:~0,2%
+IF %TESTUNC%==\\ (
+	echo WARN : Installation directory is located with UNC path. Moving to %CURDIR%\softwareSource.
+	SET INSTALLDIR=%CURDIR%\softwareSource
+	SET RESDIREXTRACT=%CURDIR%\softwareSource\RES\
+)
+ 
+SET TESTUNC=%INSTALLDIR:~0,2%
+IF %TESTUNC%==\\ (
+	echo FATAL : Alternative installation directory is located with UNC path. Aborting . . .
+	pause
+	exit
+)
+
 rem extraction des composants dnas un dossier temporaire
 IF NOT EXIST %RESDIREXTRACT% mkdir %RESDIREXTRACT%
 tar -xf %CURDIR%\res.zip -C %INSTALLDIR%\RES\
