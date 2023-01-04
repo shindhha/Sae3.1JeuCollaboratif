@@ -6,7 +6,7 @@ Representation d'un échanges de question et réponses entre un recruteur et le 
 Laurie Clément -> Développeur/Rédaction livrables <br/>
 Lala Antoine ->  Développeur/ <br/>
 Medard Guillaume ->  Développeur/ <br/>
-Nicolas Lorentin ->  Développeur//Rédaction livrables <br/>
+Nicolas Lorentin ->  Développeur/Rédaction livrables <br/>
 ## Les liens
 [ZenHub](https://github.com/shindhha/Sae3.1JeuCollaboratif#workspaces/sae31jeucollaboratif-63492dddd75581793e7a1a52/board)<br/>
 [Dossier GDrive](https://drive.google.com/drive/u/0/folders/1nrI8UrISSwA__PHS3U2pQChvAAbq7WW9)
