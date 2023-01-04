@@ -25,7 +25,8 @@ def inputInt(min, max, msg="Please input an integer"):
     while not reponseOk:
         rep = input(msg)
         try:
-            if rep.isdigit():
+            if rep.isdigit() and not rep.isspace() and len(rep) != 0:
+                rep = int(rep)
                 if rep >= min and rep <= max:
                     reponseOk = True
                 else:
