@@ -167,7 +167,7 @@ def finDuJeu(connection, questionReponseDict, questDict):
     clear()
     print("End of the game ! Applicant response : ")
     for questionId in questionReponseDict:
-        print("   - " + str(questDict[questionId]) + "\n       -> " + questionReponseDict[questionId])
+        print("- (Q) " + str(questDict[questionId]) + "\n       -> (A) " + questionReponseDict[questionId] + "\n")
     input("Press enter to exit...")
 
 

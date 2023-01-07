@@ -55,7 +55,7 @@ def initConnexion():
     ip = "tampon"
     compErreur = 0
     while not ipRgx.match(ip):
-        ip = input("Please input the server IP : ")
+        ip = input("Please input the recruiter IP : ")
         if ip == "":
             ip = "localhost"
             print("Blank IP, connecting to local . . .")
@@ -68,7 +68,7 @@ def initConnexion():
             break
 
     if compErreur < 5:
-        port = inputInt(0, 65535, "Please input the server port")
+        port = inputInt(0, 65535, "Please input the recruiter port")
         if port == 5:
             return 1
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -94,7 +94,7 @@ def boucleJeu(connexion):
 
     while True:
         # On attend une question du serveur. Ce message peut aussi être la fin de la partie
-        print("Waiting question from the server ...")
+        print("Waiting question from the recruiter ...")
         tailleQuestion = int(connexion.recv(1024).decode())
         question = connexion.recv(tailleQuestion).decode()
         clear()
